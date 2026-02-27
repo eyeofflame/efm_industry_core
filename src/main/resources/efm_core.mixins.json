@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "efm.dev.efmcore.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "efmcore.refmap.json",
+  "mixins": [
+    "alwaysCanEat.PlayerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
