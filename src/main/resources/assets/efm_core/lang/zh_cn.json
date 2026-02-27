@@ -1,5 +1,6 @@
 {
   "config.jade.plugin_efm_core.info": "hello",
   "jade.efm_core.info": "info",
-  "efm.title.zero": "Efm's Tinker"
+  "efm.title.zero": "Efm's Tinker",
+  "item.efmtinker.magic_core" : "魔法核心"
 }
