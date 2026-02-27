@@ -3,8 +3,8 @@ package efm.dev.efmcore;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import efm.dev.efmcore.integration.tinkering.Catagory;
 import efm.dev.efmcore.common.config.JsonConfigEfm;
+import efm.dev.efmcore.integration.tinkering.Catagory;
 import efm.dev.efmcore.integration.tinkering.init.EfmItemsTinker;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.Commands;
@@ -13,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -84,5 +85,8 @@ public class Efmcore {
                             return 1;
                         })
         );
+    }
+
+    public void onClientSetup(final FMLClientSetupEvent event) {
     }
 }

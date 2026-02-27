@@ -34,6 +34,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -280,6 +281,14 @@ public class CoreEventsHandler {
         if (event.getLevel().isClientSide) return;
         if (event.getEntityMounting() instanceof Enemy && event.getEntityBeingMounted() instanceof Boat) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerJump(LivingEvent.LivingJumpEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            player.setOnGround(false);
+            player.setJumping(false);
         }
     }
 }
