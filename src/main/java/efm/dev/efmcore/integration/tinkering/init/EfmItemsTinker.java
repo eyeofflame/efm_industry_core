@@ -8,8 +8,8 @@ import slimeknights.tconstruct.tools.stats.HeadMaterialStats;
 
 public class EfmItemsTinker {
     public static final String TINKER_ID = "efmstinker";
+    public static final Item.Properties ITEM_PROPS = new Item.Properties();
 
     public static final ItemDeferredRegisterExtension ITEMS = new ItemDeferredRegisterExtension(TINKER_ID);
     public static final ItemObject<ToolPartItem> MAGIC_CORE = ITEMS.register("magic_core", () -> new ToolPartItem(ITEM_PROPS, HeadMaterialStats.ID));
-    public static final Item.Properties ITEM_PROPS = new Item.Properties();
 }
