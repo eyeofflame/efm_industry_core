@@ -16,7 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 public class Catagory {
     public static final DeferredRegister<CreativeModeTab> EFM_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Efmcore.MODID);
 
-    public static final RegistryObject<CreativeModeTab> Tab = EFM_TABS.register(Efmcore.MODID,
+    public static final RegistryObject<CreativeModeTab> TAB = EFM_TABS.register(Efmcore.MODID,
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("efm.title.zero"))
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
