@@ -2,6 +2,6 @@
   "loader": "tconstruct:material",
   "parent": "forge:item/default",
   "textures": {
-    "texture": "efm_core:item/tool/parts/magic_core"
+    "texture": "efmstinker:item/tool/parts/magic_core"
   }
 }
