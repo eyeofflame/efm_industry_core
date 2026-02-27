@@ -21,7 +21,7 @@ public class Catagory {
                     .title(Component.translatable("efm.title.zero"))
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
                     .displayItems(((pParameters, pOutput) -> {
-                        pOutput.accept(EfmItemsTinker.EFM_TOOL_PART.get());
+                        pOutput.accept(EfmItemsTinker.MAGIC_CORE.get());
                     }))
                     .icon(() -> new ItemStack(Items.STONE)).build()
     );

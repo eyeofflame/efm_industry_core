@@ -13,5 +13,5 @@ public class EfmItemsTinker {
 
     public static final Item.Properties ITEM_PROPS = new Item.Properties();
 
-    public static final ItemObject<ToolPartItem> EFM_TOOL_PART = ITEMS.register("efm_tool_part", () -> new ToolPartItem(ITEM_PROPS, HeadMaterialStats.ID));
+    public static final ItemObject<ToolPartItem> MAGIC_CORE = ITEMS.register("magic_core", () -> new ToolPartItem(ITEM_PROPS, HeadMaterialStats.ID));
 }
