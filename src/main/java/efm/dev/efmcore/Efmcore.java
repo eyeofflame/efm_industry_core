@@ -7,10 +7,13 @@ import efm.dev.efmcore.common.config.JsonConfigEfm;
 import efm.dev.efmcore.integration.tinkering.Catagory;
 import efm.dev.efmcore.integration.tinkering.init.EfmItemsTinker;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -34,6 +37,7 @@ public class Efmcore {
 
         ibus.addListener(this::onCommonSetup);
         fbus.addListener(this::registerCommands);
+        fbus.addListener(this::onLivingJump);
 
         Catagory.EFM_TABS.register(ibus);
         EfmItemsTinker.ITEMS.register(ibus);
@@ -88,5 +92,15 @@ public class Efmcore {
     }
 
     public void onClientSetup(final FMLClientSetupEvent event) {
+    }
+
+    public void onLivingJump(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            Minecraft mc = Minecraft.getInstance();
+
+            if (mc.options.keyJump.consumeClick() && !player.onGround()) {
+                player.jumpFromGround();
+            }
+        }
     }
 }

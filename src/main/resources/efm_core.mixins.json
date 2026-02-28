@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "efmcore.refmap.json",
   "mixins": [
-    "alwaysCanEat.PlayerMixin"
+    "alwaysCanEat.PlayerMixin",
+    "doubleJump.LivingEntityAccessor"
   ],
   "client": [
   ],
