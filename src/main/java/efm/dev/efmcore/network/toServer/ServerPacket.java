@@ -1,5 +1,6 @@
 package efm.dev.efmcore.network.toServer;
 
+import efm.dev.efmcore.common.registry.EfmModRegistry;
 import efm.dev.efmcore.mixin.doubleJump.LivingEntityAccessor;
 import efm.dev.efmcore.network.NetworkInstance;
 import efm.dev.efmcore.network.toClient.ClientPacket;
@@ -38,7 +39,13 @@ public class ServerPacket {
                         !player.isInLava() &&
                         !player.isInWater() &&
                         ((LivingEntityAccessor) player).getNoJumpDelay() == 0 &&
-                        player.getPersistentData().getInt("efm:jump") <= 1
+                        player.getEffect(EfmModRegistry.DOUBLEJUMP_EFFECT.get()) != null &&
+                        ((player.getEffect(EfmModRegistry.DOUBLEJUMP_EFFECT.get()).getAmplifier() == 0 &&
+                                player.getPersistentData().getInt("efm:jump") < 1
+                        ) ||
+                                player.getEffect(EfmModRegistry.DOUBLEJUMP_EFFECT.get()).getAmplifier() >= 1
+                        )
+
                 ) {
 
                     NetworkInstance.CLIENT_INSTANCE.send(PacketDistributor.PLAYER.with(() -> ctx.get().getSender()), new ClientPacket(this.playerId, this.operation));

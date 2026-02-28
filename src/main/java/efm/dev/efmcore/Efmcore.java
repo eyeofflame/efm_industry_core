@@ -136,7 +136,8 @@ public class Efmcore {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.level != null) {
             MobEffectInstance effect = mc.player.getEffect(EfmModRegistry.DOUBLEJUMP_EFFECT.get());
-            if (event.getKey() == mc.options.keyJump.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS && effect != null && effect.getDuration() > 0) {
+            if (event.getKey() == mc.options.keyJump.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS && effect != null) {
+
                 NetworkInstance.INSTANCE.sendToServer(new ServerPacket(mc.player.getUUID(), "jump"));
             }
         }
