@@ -1,6 +1,7 @@
 package efm.dev.efmcore.network.toClient;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -46,6 +47,7 @@ public class ClientPacket {
                 return;
             }
             mc.player.jumpFromGround();
+            mc.player.level().addParticle(ParticleTypes.POOF, mc.player.getX(), mc.player.getY(), mc.player.getZ(), 0, 0.1, 0);
         }
     }
 }

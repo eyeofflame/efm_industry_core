@@ -1,8 +1,11 @@
 package efm.dev.efmcore.network.toServer;
 
+import efm.dev.efmcore.mixin.doubleJump.LivingEntityAccessor;
 import efm.dev.efmcore.network.NetworkInstance;
 import efm.dev.efmcore.network.toClient.ClientPacket;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
@@ -30,9 +33,19 @@ public class ServerPacket {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getDirection().getReceptionSide().isServer()) {
-                if (this.operation.equals("jump") && ctx.get().getSender().getUUID().equals(this.playerId) && !ctx.get().getSender().onGround() && !ctx.get().getSender().isInLava() && !ctx.get().getSender().isInWater()) {
+                ServerPlayer player = ctx.get().getSender();
+                if (player != null && this.operation.equals("jump") && player.getUUID().equals(this.playerId) &&
+                        !player.onGround() &&
+                        !player.isInLava() &&
+                        !player.isInWater() &&
+                        ((LivingEntityAccessor) player).getNoJumpDelay() == 0 &&
+                        player.getPersistentData().getInt("efm:jump") < 2
+                ) {
+
                     NetworkInstance.CLIENT_INSTANCE.send(PacketDistributor.PLAYER.with(() -> ctx.get().getSender()), new ClientPacket(this.playerId, this.operation));
-                    ctx.get().getSender().jumpFromGround();
+                    player.jumpFromGround();
+                    ((LivingEntityAccessor) player).setNoJumpDelay(10);
+                    player.getPersistentData().putInt("efm:jump", player.getPersistentData().getInt("efm:jump") + 1);
                 }
             }
         });
