@@ -8,4 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface LivingEntityAccessor {
     @Accessor("noJumpDelay")
     int getNoJumpDelay();
+
+    @Accessor("noJumpDelay")
+    void setNoJumpDelay(int delay);
 }

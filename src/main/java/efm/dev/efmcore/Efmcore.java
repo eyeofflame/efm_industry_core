@@ -10,8 +10,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -37,6 +35,7 @@ public class Efmcore {
         IEventBus fbus = MinecraftForge.EVENT_BUS;
 
         ibus.addListener(this::onCommonSetup);
+        ibus.addListener(this::onClientSetup);
         fbus.addListener(this::registerCommands);
         fbus.addListener(this::onLivingJump);
 
@@ -92,16 +91,17 @@ public class Efmcore {
         );
     }
 
-    public void onClientSetup(final FMLClientSetupEvent event) {
+    public void onClientSetup(FMLClientSetupEvent event) {
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public void onLivingJump(TickEvent.PlayerTickEvent event) {
-        if (!event.player.onGround() && !event.player.isInLava() && !event.player.isInWater()) {
+        if (!event.player.onGround() && !event.player.isInLava() && !event.player.isInWater() && event.phase == TickEvent.Phase.END) {
             Minecraft mc = Minecraft.getInstance();
 
-            if (event.player.level().isClientSide && mc.options.keyJump.consumeClick()) {
+            if (mc.player != null && mc.options.keyJump.consumeClick()) {
                 event.player.jumpFromGround();
+                mc.player.jumpFromGround();
             }
         }
     }
