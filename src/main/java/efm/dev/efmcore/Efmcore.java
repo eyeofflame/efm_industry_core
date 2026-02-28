@@ -14,10 +14,17 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -88,6 +95,25 @@ public class Efmcore {
 
     public void onCommonSetup(FMLCommonSetupEvent event) {
         loadConfig();
+
+        event.enqueueWork(() -> {
+
+            ItemStack potionNormal = Items.POTION.getDefaultInstance();
+            PotionUtils.setPotion(potionNormal, Potions.MUNDANE);
+            ItemStack stack = PotionUtils.setPotion(new ItemStack(Items.POTION), EfmModRegistry.DOUBLEJUMP_POTION1.get());
+            ItemStack stack1 = PotionUtils.setPotion(new ItemStack(Items.POTION), EfmModRegistry.DOUBLEJUMP_POTION2.get());
+            BrewingRecipeRegistry.addRecipe(
+                    Ingredient.of(potionNormal),
+                    Ingredient.of(Items.RABBIT_FOOT),
+                    stack
+            );
+
+            BrewingRecipeRegistry.addRecipe(
+                    StrictNBTIngredient.of(stack),
+                    Ingredient.of(Items.REDSTONE_BLOCK),
+                    stack1
+            );
+        });
     }
 
     public void registerCommands(RegisterCommandsEvent event) {
