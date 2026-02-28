@@ -283,12 +283,4 @@ public class CoreEventsHandler {
             event.setCanceled(true);
         }
     }
-
-    @SubscribeEvent
-    public static void onPlayerJump(LivingEvent.LivingJumpEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            player.setOnGround(false);
-            player.setJumping(false);
-        }
-    }
 }
