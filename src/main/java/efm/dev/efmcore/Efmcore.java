@@ -10,15 +10,16 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.lwjgl.glfw.GLFW;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -95,12 +96,10 @@ public class Efmcore {
     }
 
 
-    public void onLivingJump(TickEvent.PlayerTickEvent event) {
-        if (!event.player.onGround() && !event.player.isInLava() && !event.player.isInWater() && event.phase == TickEvent.Phase.END) {
-            Minecraft mc = Minecraft.getInstance();
-
-            if (mc.player != null && mc.options.keyJump.consumeClick()) {
-                event.player.jumpFromGround();
+    public void onLivingJump(InputEvent.Key event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && mc.level != null) {
+            if (event.getKey() == mc.options.keyJump.getKey().getValue() && event.getAction() == GLFW.GLFW_RELEASE) {
                 mc.player.jumpFromGround();
             }
         }
