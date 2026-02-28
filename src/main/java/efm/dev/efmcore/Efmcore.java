@@ -6,11 +6,14 @@ import com.google.gson.JsonSyntaxException;
 import efm.dev.efmcore.common.config.JsonConfigEfm;
 import efm.dev.efmcore.integration.tinkering.Catagory;
 import efm.dev.efmcore.integration.tinkering.init.EfmItemsTinker;
+import efm.dev.efmcore.network.NetworkInstance;
+import efm.dev.efmcore.network.toServer.ServerPacket;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -42,6 +45,8 @@ public class Efmcore {
 
         Catagory.EFM_TABS.register(ibus);
         EfmItemsTinker.ITEMS.register(ibus);
+
+        NetworkInstance.register();
     }
 
     private static Path getConfigPath() {
@@ -95,12 +100,11 @@ public class Efmcore {
     public void onClientSetup(FMLClientSetupEvent event) {
     }
 
-
     public void onLivingJump(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player != null && mc.level != null) {
             if (event.getKey() == mc.options.keyJump.getKey().getValue() && event.getAction() == GLFW.GLFW_RELEASE) {
-                mc.player.jumpFromGround();
+                NetworkInstance.INSTANCE.sendToServer(new ServerPacket(mc.player.getUUID(), "jump"));
             }
         }
     }
