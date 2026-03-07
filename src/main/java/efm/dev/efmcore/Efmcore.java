@@ -61,11 +61,10 @@ public class Efmcore {
         }
 
         Catagory.EFM_TABS.register(ibus);
-        EfmItemsTinker.ITEMS.register(ibus);
 
         NetworkInstance.register();
-
         EfmModRegistry.register(ibus);
+        EfmItemsTinker.ITEMS.register(ibus);
     }
 
     private static Path getConfigPath() {

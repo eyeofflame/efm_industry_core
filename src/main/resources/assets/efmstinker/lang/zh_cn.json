@@ -1,7 +1,6 @@
 {
   "config.jade.plugin_efm_core.info": "hello",
   "jade.efm_core.info": "info",
-  "efm.title.zero": "Efm's Tinker",
   "item.efmstinker.magic_core": "魔法核心",
   "effect.efm.double.jump": "二段跳",
   "item.minecraft.potion.effect.efm_doublejump_potion": "二段跳药水",
