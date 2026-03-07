@@ -1,6 +1,7 @@
 package efm.dev.efmcore.common.eventsHandler;
 
 import efm.dev.efmcore.Efmcore;
+import efm.dev.efmcore.common.registry.EfmModRegistry;
 import efm.dev.efmcore.common.untils.EfmHelper;
 import efm.dev.efmcore.common.untils.bossesHealthRange.BossesHealthRange;
 import net.minecraft.ChatFormatting;
@@ -14,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -34,6 +36,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -164,12 +167,13 @@ public class CoreEventsHandler {
         //boss护盾需特定物品破
         if (checkIsBossesThisClass(event.getEntity())) {
             LivingEntity entity = event.getEntity();
-            if (event.getEntity().getAbsorptionAmount() > 0) {
-                //event.setAmount(0f);
-                Level level = event.getEntity().level();
-                AABB searchArea = event.getEntity().getBoundingBox().inflate(30);
-                List<Player> playerList = level.getEntitiesOfClass(Player.class, searchArea);
+            if (entity.getAbsorptionAmount() > 0) {
 
+                MobEffectInstance instance = entity.getEffect(EfmModRegistry.CURSE_EFM.get());
+
+                if (instance == null) {
+                    event.setAmount(0f);
+                }
 
             } else if (event.getEntity().getAbsorptionAmount() <= 0) {
                 float damage = event.getAmount();
@@ -219,6 +223,18 @@ public class CoreEventsHandler {
             if (!event.player.getPersistentData().contains("efm:jump") || event.player.onGround()) {
                 event.player.getPersistentData().putInt("efm:jump", 0);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingTick(LivingEvent.LivingTickEvent event) {
+        if (event.getEntity().level().isClientSide || !checkIsBossesThisClass(event.getEntity()) || event.getEntity().tickCount % 100 != 0)
+            return;
+
+        LivingEntity entity = event.getEntity();
+
+        if (entity.getMaxHealth() != entity.getHealth() && entity.getEffect(EfmModRegistry.CURSE_EFM.get()) == null) {
+            entity.heal(entity.getMaxHealth() * 0.05f);
         }
     }
 
