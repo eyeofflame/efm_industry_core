@@ -6,7 +6,8 @@
   "refmap": "efm_core.refmap.json",
   "mixins": [
     "alwaysCanEat.PlayerMixin",
-    "doubleJump.LivingEntityAccessor"
+    "doubleJump.LivingEntityAccessor",
+    "minecraft.WitherBossMixin"
   ],
   "client": [
   ],

@@ -34,6 +34,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -100,10 +101,6 @@ public class CoreEventsHandler {
 
                 playerList.forEach(player -> {
                     player.sendSystemMessage(Component.literal("[").append(Component.translatable(event.getEntity().getName().getString())).append("] 我已归来！").withStyle(ChatFormatting.RED));
-                    ((ServerPlayer) player).connection.send(new ClientboundUpdateAttributesPacket(
-                            enemy.getId(),
-                            enemy.getAttributes().getSyncableAttributes()
-                    ));
                 });
 
                 ServerLevel serverLevel = (ServerLevel) level;
@@ -134,8 +131,8 @@ public class CoreEventsHandler {
                 });
 
 
-                boss.addTag("efm:respawn");
                 event.setCanceled(true);
+                boss.addTag("efm:respawn");
             }
         }
     }
@@ -164,20 +161,27 @@ public class CoreEventsHandler {
             event.setAmount(event.getAmount() * 0.8f);
         }
 
-        //boss护盾需特定物品破
-        if (checkIsBossesThisClass(event.getEntity())) {
+        if (checkIsBossesThisClass(event.getEntity()) && event.getEntity().getAbsorptionAmount() <= 0) {
+            event.setAmount(event.getAmount() * 0.7f);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingAttack(LivingAttackEvent event) {
+        if (!event.getEntity().level().isClientSide) {
             LivingEntity entity = event.getEntity();
-            if (entity.getAbsorptionAmount() > 0) {
 
-                MobEffectInstance instance = entity.getEffect(EfmModRegistry.CURSE_EFM.get());
+            //boss护盾需特定物品破
+            if (checkIsBossesThisClass(entity)) {
+                if (entity.getAbsorptionAmount() > 0) {
 
-                if (instance == null) {
-                    event.setAmount(0f);
+                    MobEffectInstance instance = entity.getEffect(EfmModRegistry.CURSE_EFM.get());
+
+                    if (instance == null) {
+                        event.setCanceled(true);
+                    }
+
                 }
-
-            } else if (event.getEntity().getAbsorptionAmount() <= 0) {
-                float damage = event.getAmount();
-                event.setAmount(damage * 0.7f);
             }
         }
     }
@@ -228,7 +232,7 @@ public class CoreEventsHandler {
 
     @SubscribeEvent
     public static void onLivingTick(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity().level().isClientSide || !checkIsBossesThisClass(event.getEntity()) || event.getEntity().tickCount % 100 != 0)
+        if (event.getEntity().level().isClientSide || !checkIsBossesThisClass(event.getEntity()) || event.getEntity().tickCount % 10 != 0)
             return;
 
         LivingEntity entity = event.getEntity();
