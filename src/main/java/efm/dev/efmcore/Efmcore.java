@@ -19,13 +19,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
 import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -44,14 +43,22 @@ public class Efmcore {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static JsonConfigEfm configEfm = new JsonConfigEfm();
 
+    private static final Boolean debug = true;
+
     public Efmcore(FMLJavaModLoadingContext context) {
         IEventBus ibus = context.getModEventBus();
         IEventBus fbus = MinecraftForge.EVENT_BUS;
+
+        loadConfig();
 
         ibus.addListener(this::onCommonSetup);
         ibus.addListener(this::onClientSetup);
         fbus.addListener(this::registerCommands);
         fbus.addListener(this::onLivingJump);
+
+        if (debug) {
+            fbus.addListener(this::onChat);
+        }
 
         Catagory.EFM_TABS.register(ibus);
         EfmItemsTinker.ITEMS.register(ibus);
@@ -94,25 +101,45 @@ public class Efmcore {
     }
 
     public void onCommonSetup(FMLCommonSetupEvent event) {
-        loadConfig();
 
         event.enqueueWork(() -> {
 
             ItemStack potionNormal = Items.POTION.getDefaultInstance();
             PotionUtils.setPotion(potionNormal, Potions.MUNDANE);
-            ItemStack stack = PotionUtils.setPotion(new ItemStack(Items.POTION), EfmModRegistry.DOUBLEJUMP_POTION1.get());
-            ItemStack stack1 = PotionUtils.setPotion(new ItemStack(Items.POTION), EfmModRegistry.DOUBLEJUMP_POTION2.get());
-            BrewingRecipeRegistry.addRecipe(
-                    Ingredient.of(potionNormal),
-                    Ingredient.of(Items.RABBIT_FOOT),
-                    stack
-            );
+            ItemStack stack = PotionUtils.setPotion(new ItemStack(Items.POTION), EfmModRegistry.map_level1.get(0).get());
 
-            BrewingRecipeRegistry.addRecipe(
-                    StrictNBTIngredient.of(stack),
-                    Ingredient.of(Items.REDSTONE_BLOCK),
-                    stack1
-            );
+            ItemStack potion = new ItemStack(Items.POTION);
+
+
+            if (configEfm.isUseCustomBrewing()) {
+
+                BrewingRecipeRegistry.addRecipe(
+                        Ingredient.of(potionNormal),
+                        Ingredient.of(Items.RABBIT_FOOT),
+                        stack
+                );
+
+                for (int i = 0; i < 9; i++) {
+                    ItemStack item0 = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level1.get(i).get());
+                    ItemStack item1 = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level1.get(i + 1).get());
+
+                    BrewingRecipeRegistry.addRecipe(
+                            StrictNBTIngredient.of(item0),
+                            Ingredient.of(configEfm.getUpgrade0()),
+                            item1
+                    );
+
+                    ItemStack itemStack = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level2.get(i).get());
+
+                    BrewingRecipeRegistry.addRecipe(
+                            StrictNBTIngredient.of(item0),
+                            Ingredient.of(configEfm.getUpgrade1()),
+                            itemStack
+                    );
+
+                }
+
+            }
         });
     }
 
@@ -131,15 +158,21 @@ public class Efmcore {
     public void onClientSetup(FMLClientSetupEvent event) {
     }
 
-    @OnlyIn(Dist.CLIENT)
+
     public void onLivingJump(InputEvent.Key event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.level != null) {
+        if (mc.player != null && mc.level != null && mc.level.isClientSide()) {
             MobEffectInstance effect = mc.player.getEffect(EfmModRegistry.DOUBLEJUMP_EFFECT.get());
             if (event.getKey() == mc.options.keyJump.getKey().getValue() && event.getAction() == GLFW.GLFW_PRESS && effect != null) {
 
                 NetworkInstance.INSTANCE.sendToServer(new ServerPacket(mc.player.getUUID(), "jump"));
             }
+        }
+    }
+
+    public void onChat(ServerChatEvent event) {
+        if (event.getRawText().equals("test")) {
+            event.setMessage(Component.literal(configEfm.getUpgrade0().getDescriptionId() + '\n' + configEfm.getUpgrade1().getDescriptionId()));
         }
     }
 }

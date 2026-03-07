@@ -1,6 +1,10 @@
 package efm.dev.efmcore.common.config;
 
 import efm.dev.efmcore.common.untils.bossesHealthRange.BossesHealthRange;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +16,9 @@ public class JsonConfigEfm {
     private int bossesGetProtection = 30;
     private int playerGetProtection = 20;
     private List<String> bossesMaxHealthRange = new ArrayList<>();
+    private boolean useCustomBrewing = true;
+    private String ingredientUpgrade0 = "";
+    private String ingredientUpgrade1 = "";
 
     public JsonConfigEfm() {
     }
@@ -46,5 +53,25 @@ public class JsonConfigEfm {
         }
 
         return list;
+    }
+
+    public boolean isUseCustomBrewing() {
+        return useCustomBrewing;
+    }
+
+    public Item getUpgrade0() {
+        var item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(this.ingredientUpgrade0));
+        if (item == null || item.equals(Items.AIR)) {
+            return Items.AMETHYST_BLOCK;
+        }
+        return item;
+    }
+
+    public Item getUpgrade1() {
+        var item = ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(this.ingredientUpgrade1));
+        if (item == null || item.equals(Items.AIR)) {
+            return Items.REDSTONE_BLOCK;
+        }
+        return item;
     }
 }

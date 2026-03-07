@@ -28,9 +28,6 @@ public class ClientPacket {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            //if (this.operation.equals("jump"))
-            //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> handleClient(this.id));
-
             if (ctx.get().getDirection().getReceptionSide().isClient()) {
                 handleClient(this.id);
             }
@@ -38,7 +35,6 @@ public class ClientPacket {
         ctx.get().setPacketHandled(true);
     }
 
-    //@OnlyIn(Dist.CLIENT)
     private void handleClient(UUID id) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level != null && mc.player != null) {
@@ -47,6 +43,7 @@ public class ClientPacket {
                 return;
             }
             mc.player.jumpFromGround();
+            mc.player.fallDistance = 0f;
             mc.player.level().addParticle(ParticleTypes.POOF, mc.player.getX(), mc.player.getY(), mc.player.getZ(), 0, 0.1, 0);
         }
     }

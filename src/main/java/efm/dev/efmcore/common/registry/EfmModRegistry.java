@@ -2,13 +2,16 @@ package efm.dev.efmcore.common.registry;
 
 import efm.dev.efmcore.Efmcore;
 import efm.dev.efmcore.common.registry.mob_effect.DoubleJumpMobEffect;
+import efm.dev.efmcore.common.registry.potion.DoubleJumpPotion;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EfmModRegistry {
 
@@ -16,10 +19,21 @@ public class EfmModRegistry {
     public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, Efmcore.MODID);
 
     public static final RegistryObject<MobEffect> DOUBLEJUMP_EFFECT = EFFECTS.register("double_jump", DoubleJumpMobEffect::new);
-    public static final RegistryObject<Potion> DOUBLEJUMP_POTION1 = POTIONS.register("double_jump_potion", () -> new Potion(new MobEffectInstance(DOUBLEJUMP_EFFECT.get(), 60 * 20, 0)));
-    public static final RegistryObject<Potion> DOUBLEJUMP_POTION2 = POTIONS.register("double_jump_potion_level1", () -> new Potion(new MobEffectInstance(DOUBLEJUMP_EFFECT.get(), 5 * 60 * 20, 0)));
+
+    public static Map<Integer, RegistryObject<Potion>> map_level1 = new HashMap<>();
+    public static Map<Integer, RegistryObject<Potion>> map_level2 = new HashMap<>();
 
     public static void register(IEventBus bus) {
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+
+            RegistryObject<Potion> potionRegistryObject1 = POTIONS.register("efm_doublejump_potion1_" + i, () -> new DoubleJumpPotion(20 * 60, finalI));
+            RegistryObject<Potion> potionRegistryObject2 = POTIONS.register("efm_doublejump_potion2_" + i, () -> new DoubleJumpPotion(20 * 60 * 5, finalI));
+
+            map_level1.put(i, potionRegistryObject1);
+            map_level2.put(i, potionRegistryObject2);
+        }
+
         EFFECTS.register(bus);
         POTIONS.register(bus);
     }

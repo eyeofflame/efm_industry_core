@@ -83,4 +83,24 @@ public interface EfmHelper {
         }
         return check;
     }
+
+    static Integer getIntValue(Player player, String dataName) {
+        return player.getPersistentData().getInt(dataName);
+    }
+
+    static Boolean getBooleanValue(Player player, String dataName) {
+        return player.getPersistentData().getBoolean(dataName);
+    }
+
+    static boolean checkDataExist(Player player, String dataName) {
+        return player.getPersistentData().contains(dataName);
+    }
+
+    static void setIntValue(Player player, String name, Integer integer) {
+        player.getPersistentData().putInt(name, integer);
+    }
+
+    static void setBooleanValue(Player player, String name, Boolean bool) {
+        player.getPersistentData().putBoolean(name, bool);
+    }
 }
