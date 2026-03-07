@@ -7,7 +7,7 @@
   "mixins": [
     "alwaysCanEat.PlayerMixin",
     "doubleJump.LivingEntityAccessor",
-    "minecraft.WitherBossMixin"
+    "minecraft.LivingEntityMixin"
   ],
   "client": [
   ],

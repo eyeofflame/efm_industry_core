@@ -14,12 +14,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = LivingEntity.class, remap = true)
-public abstract class WitherBossMixin extends Entity {
+public abstract class LivingEntityMixin extends Entity {
 
     @Shadow
     public abstract void forceAddEffect(MobEffectInstance pInstance, @Nullable Entity pEntity);
 
-    public WitherBossMixin(EntityType<?> pEntityType, Level pLevel) {
+    public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
