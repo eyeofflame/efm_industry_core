@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Random;
 
 public interface EfmHelper {
+    Random randomEfm = new Random();
+
     static void deleteItems(Player player) {
         player.getInventory().compartments.forEach(list -> {
             float amount = 0;
@@ -102,5 +105,9 @@ public interface EfmHelper {
 
     static void setBooleanValue(Player player, String name, Boolean bool) {
         player.getPersistentData().putBoolean(name, bool);
+    }
+
+    static ResourceLocation getRes(Item item){
+        return ForgeRegistries.ITEMS.getKey(item);
     }
 }

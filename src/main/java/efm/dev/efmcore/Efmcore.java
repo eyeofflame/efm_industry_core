@@ -118,7 +118,7 @@ public class Efmcore {
                         stack
                 );
 
-                for (int i = 0; i < 9; i++) {
+                /*for (int i = 0; i < 2; i++) {
                     ItemStack item0 = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level1.get(i).get());
                     ItemStack item1 = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level1.get(i + 1).get());
 
@@ -136,7 +136,7 @@ public class Efmcore {
                             itemStack
                     );
 
-                }
+                }*/
 
             }
         });

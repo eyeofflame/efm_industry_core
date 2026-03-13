@@ -22,7 +22,11 @@ public class Catagory {
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("efm.title.zero"))
                     .withTabsBefore(CreativeModeTabs.SPAWN_EGGS)
-                    .displayItems(EfmItemsTinker::addTabItems)
+                    .displayItems((parameters, output) -> {
+                        EfmItemsTinker.addTabItems(parameters, output);
+
+                        output.accept(EfmModRegistry.UNDEAD_HEART.get());
+                    })
                     .icon(() -> PotionUtils.setPotion(new ItemStack(Items.POTION), EfmModRegistry.map_level1.get(0).get()))
                     .withSearchBar()
                     .build());

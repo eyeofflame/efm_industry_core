@@ -1,6 +1,7 @@
 package efm.dev.efmcore.common.eventsHandler;
 
 import efm.dev.efmcore.Efmcore;
+import efm.dev.efmcore.common.efm_events.ItemBurnEvent;
 import efm.dev.efmcore.common.registry.EfmModRegistry;
 import efm.dev.efmcore.common.untils.EfmHelper;
 import efm.dev.efmcore.common.untils.bossesHealthRange.BossesHealthRange;
@@ -9,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,6 +21,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -306,6 +309,22 @@ public class CoreEventsHandler {
         if (event.getLevel().isClientSide) return;
         if (event.getEntityMounting() instanceof Enemy && event.getEntityBeingMounted() instanceof Boat) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onItemBurn(ItemBurnEvent event) {
+        if (event.entity.level().isClientSide) return;
+
+        ResourceLocation id = EfmHelper.getRes(event.entity.getItem().getItem());
+
+        if (id.toString().equals("minecraft:rotten_flesh")) {
+            ItemEntity entity = event.entity;
+
+            if (entity.getOwner() instanceof Player player && EfmHelper.efmRandomNoRepeat(1000, 1).contains(EfmHelper.randomEfm.nextInt(1000))) {
+                player.sendSystemMessage(Component.literal("hello"));
+                entity.discard();
+            }
         }
     }
 }
