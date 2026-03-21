@@ -1,16 +1,14 @@
 package efm.dev.tinker_survival_efm.api;
 
-import efm.dev.tinker_survival_efm.Tinker_survival_efm;
 import efm.dev.tinker_survival_efm.config.EfmConfig;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.lang.reflect.Method;
 import java.util.Objects;
 
 public class EfmApi {
@@ -57,14 +55,8 @@ public class EfmApi {
     }
 
     private static boolean checkCanAttack(Item item) {
-        try {
-            Method method = item.getClass().getMethod(
-                    "hurtEnemy", ItemStack.class, LivingEntity.class, LivingEntity.class
-            );
-            return !method.getDeclaringClass().equals(Item.class);
-        } catch (NoSuchMethodException e) {
-            Tinker_survival_efm.LOGGER.error(e.getMessage());
-            return false;
-        }
+        return (/*item instanceof TieredItem || item instanceof TridentItem*/
+                ForgeRegistries.ITEMS.getHolder(item).map(itemHolder -> itemHolder.is(ItemTags.TOOLS)).orElse(false)
+        );
     }
 }

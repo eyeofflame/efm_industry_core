@@ -18,9 +18,9 @@ public class EfmConfig {
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfMod = builder.defineListAllowEmpty("whiteListMod", new ArrayList<>(), EfmConfig::check);
 
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfAttackableOrMaterial = builder.defineListAllowEmpty("whiteListAttackable", new ArrayList<>(), EfmConfig::check);
+    private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfAttackableOrMaterial = builder.defineListAllowEmpty("whiteListAttackable", List.of("minecraft:wooden_axe", "minecraft:wooden_pickaxe"), EfmConfig::check);
 
-    private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfArmorOrMaterial = builder.defineListAllowEmpty("whiteListArmor", List.of("minecraft:wooden_axe", "minecraft:wooden_pickaxe"), EfmConfig::check);
+    private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfArmorOrMaterial = builder.defineListAllowEmpty("whiteListArmor", new ArrayList<>(), EfmConfig::check);
 
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfModAllowUse = builder.defineListAllowEmpty("whiteListModUse", new ArrayList<>(), EfmConfig::check);
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> whiteListOfItemAllowUse = builder.defineListAllowEmpty("whiteListItemUse", new ArrayList<>(), EfmConfig::check);

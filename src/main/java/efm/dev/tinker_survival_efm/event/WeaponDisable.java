@@ -18,7 +18,8 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Tinker_survival_efm.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class WeaponDisable {
@@ -63,13 +64,15 @@ public class WeaponDisable {
         }
     }
 
-    private static final UUID uid = UUID.fromString("83339827-f7fb-4600-bc3f-05918c0a6924");
-    private static final AttributeModifier modifier = new AttributeModifier(uid, "armor efm modifier", -1d, AttributeModifier.Operation.MULTIPLY_BASE);
-
     @SubscribeEvent
     public static void onAttributeAttach(ItemAttributeModifierEvent event) {
-        if (EfmApi.checkAll(event.getItemStack().getItem()) && event.getItemStack().getItem() instanceof ArmorItem) {
-            if (!event.getModifiers().containsValue(modifier)) event.addModifier(Attributes.ARMOR, modifier);
+        if (EfmApi.checkAll(event.getItemStack().getItem()) && event.getItemStack().getItem() instanceof ArmorItem armorItem) {
+            List<AttributeModifier> modifiers = new ArrayList<>(event.getModifiers().get(Attributes.ARMOR));
+
+            for (var modifier : modifiers) {
+                event.removeModifier(Attributes.ARMOR, modifier);
+            }
+
         }
     }
 
