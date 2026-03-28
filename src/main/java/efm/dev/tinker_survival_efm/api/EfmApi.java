@@ -3,10 +3,7 @@ package efm.dev.tinker_survival_efm.api;
 import efm.dev.tinker_survival_efm.config.EfmConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ProjectileWeaponItem;
+import net.minecraft.world.item.*;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
@@ -55,7 +52,7 @@ public class EfmApi {
     }
 
     private static boolean checkCanAttack(Item item) {
-        return (/*item instanceof TieredItem || item instanceof TridentItem*/
+        return (item instanceof TieredItem || item instanceof TridentItem ||
                 ForgeRegistries.ITEMS.getHolder(item).map(itemHolder -> itemHolder.is(ItemTags.TOOLS)).orElse(false)
         );
     }
