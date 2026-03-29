@@ -15,6 +15,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -56,6 +57,15 @@ public class WeaponDisable {
 
     @SubscribeEvent
     public static void onUse(PlayerInteractEvent.RightClickItem event) {
+        Player player = event.getEntity();
+        if (EfmApi.checkAll(event.getItemStack().getItem()) && EfmApi.checkWeaponUse(event.getItemStack())) {
+            player.displayClientMessage(Component.literal("该物品不能进行操作！").withStyle(ChatFormatting.RED), true);
+            if (event.getCancellationResult() != null) event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onUseOnBlock(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
         if (EfmApi.checkAll(event.getItemStack().getItem()) && EfmApi.checkWeaponUse(event.getItemStack())) {
             player.displayClientMessage(Component.literal("该物品不能进行操作！").withStyle(ChatFormatting.RED), true);
