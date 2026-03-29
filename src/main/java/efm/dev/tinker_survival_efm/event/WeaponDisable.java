@@ -58,7 +58,7 @@ public class WeaponDisable {
     @SubscribeEvent
     public static void onUse(PlayerInteractEvent.RightClickItem event) {
         Player player = event.getEntity();
-        if (EfmApi.checkAll(event.getItemStack().getItem()) && EfmApi.checkWeaponUse(event.getItemStack())) {
+        if (EfmApi.checkAll(event.getItemStack()) && EfmApi.checkWeaponUse(event.getItemStack())) {
             player.displayClientMessage(Component.literal("该物品不能进行操作！").withStyle(ChatFormatting.RED), true);
             if (event.getCancellationResult() != null) event.setCanceled(true);
         }
@@ -67,7 +67,7 @@ public class WeaponDisable {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void onUseOnBlock(PlayerInteractEvent.RightClickBlock event) {
         Player player = event.getEntity();
-        if (EfmApi.checkAll(event.getItemStack().getItem()) && EfmApi.checkWeaponUse(event.getItemStack())) {
+        if (EfmApi.checkAll(event.getItemStack()) && EfmApi.checkWeaponUse(event.getItemStack())) {
             player.displayClientMessage(Component.literal("该物品不能进行操作！").withStyle(ChatFormatting.RED), true);
             if (event.getCancellationResult() != null) event.setCanceled(true);
         }
@@ -75,7 +75,7 @@ public class WeaponDisable {
 
     @SubscribeEvent
     public static void onAttributeAttach(ItemAttributeModifierEvent event) {
-        if (EfmApi.checkAll(event.getItemStack().getItem()) && event.getItemStack().getItem() instanceof ArmorItem armorItem) {
+        if (EfmApi.checkAll(event.getItemStack()) && event.getItemStack().getItem() instanceof ArmorItem armorItem) {
             List<AttributeModifier> modifiers = new ArrayList<>(event.getModifiers().get(Attributes.ARMOR));
 
             for (AttributeModifier modifier : modifiers) {
@@ -87,7 +87,7 @@ public class WeaponDisable {
 
     @SubscribeEvent
     public static void itemTooltip(ItemTooltipEvent event) {
-        if (EfmApi.checkAll(event.getItemStack().getItem())) {
+        if (EfmApi.checkAll(event.getItemStack())) {
             event.getToolTip().add(Component.translatable("efm.disable.message").withStyle(ChatFormatting.RED));
 
             if (!EfmApi.checkWeaponUse(event.getItemStack())) {
