@@ -11,9 +11,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -36,7 +36,7 @@ public class WeaponDisable {
                             EfmApi.checkerWeapon(itemInMain)
             ) {
                 player.displayClientMessage(Component.literal("该物品不能造成伤害！").withStyle(ChatFormatting.RED), true);
-                event.setAmount(0f);
+                event.setCanceled(true);
             }
         }
     }
@@ -55,12 +55,11 @@ public class WeaponDisable {
     }
 
     @SubscribeEvent
-    public static void onUse(LivingEntityUseItemEvent.Start event) {
-        if (/*event.getEntity().level().isClientSide || */!(event.getEntity() instanceof Player player)) return;
-
-        if (EfmApi.checkAll(event.getItem().getItem()) && EfmApi.checkWeaponUse(event.getItem())) {
-            player.displayClientMessage(Component.literal("该物品不能使用！").withStyle(ChatFormatting.RED), true);
-            event.setCanceled(true);
+    public static void onUse(PlayerInteractEvent.RightClickItem event) {
+        Player player = event.getEntity();
+        if (EfmApi.checkAll(event.getItemStack().getItem()) && EfmApi.checkWeaponUse(event.getItemStack())) {
+            player.displayClientMessage(Component.literal("该物品不能进行操作！").withStyle(ChatFormatting.RED), true);
+            if (event.getCancellationResult() != null) event.setCanceled(true);
         }
     }
 
