@@ -247,7 +247,7 @@ public class CoreEventsHandler {
             float f = entity.getLightLevelDependentMagicValue();
             BlockPos blockpos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
             boolean flag = entity.isInWaterRainOrBubble() || entity.isInPowderSnow || entity.wasInPowderSnow;
-            if (f > 0.5F && /*EfmHelper.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F &&*/ !flag && entity.level().canSeeSky(blockpos)) {
+            if (f > 0.5F && !flag && entity.level().canSeeSky(blockpos)) {
                 return true;
             }
         }
