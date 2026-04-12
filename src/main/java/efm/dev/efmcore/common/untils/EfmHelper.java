@@ -3,6 +3,7 @@ package efm.dev.efmcore.common.untils;
 import efm.dev.efmcore.Efmcore;
 import efm.dev.efmcore.common.untils.bossesHealthRange.BossesHealthRange;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +18,7 @@ import java.util.Random;
 
 public interface EfmHelper {
     Random randomEfm = new Random();
+    RandomSource random = RandomSource.create();
 
     static void deleteItems(Player player) {
         player.getInventory().compartments.forEach(list -> {
@@ -43,13 +45,16 @@ public interface EfmHelper {
         return Efmcore.configEfm.getBossesList().contains(id);
     }
 
+    List<Integer> repeatRandomList = new ArrayList<>();
 
     static List<Integer> efmRandomNoRepeat(int max, int bound) {
         if (bound > 0) {
-            List<Integer> list0 = new ArrayList<>();
-            for (int i = 0; i < max; i++) {
-                list0.add(i);
+            if (repeatRandomList.isEmpty()) for (int i = 0; i < max; i++) {
+                repeatRandomList.add(i);
             }
+
+            List<Integer> list0 = new ArrayList<>(repeatRandomList);
+
             Collections.shuffle(list0);
             return list0.subList(0, bound);
         }
@@ -107,7 +112,7 @@ public interface EfmHelper {
         player.getPersistentData().putBoolean(name, bool);
     }
 
-    static ResourceLocation getRes(Item item){
+    static ResourceLocation getRes(Item item) {
         return ForgeRegistries.ITEMS.getKey(item);
     }
 }

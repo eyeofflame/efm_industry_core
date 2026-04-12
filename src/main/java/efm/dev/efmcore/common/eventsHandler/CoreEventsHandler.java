@@ -230,7 +230,29 @@ public class CoreEventsHandler {
             if (!event.player.getPersistentData().contains("efm:jump") || event.player.onGround()) {
                 event.player.getPersistentData().putInt("efm:jump", 0);
             }
+
+            if (event.player.tickCount % 20 == 0 && isSunTick(event.player) && event.player.getEffect(EfmModRegistry.UNDEADER.get()) != null) {
+                event.player.setSecondsOnFire(8);
+            }
+
+            if (event.player.tickCount % 100 == 0 && event.player.getInventory().countItem(EfmModRegistry.UNDEAD_HEART.get()) > 0) {
+                event.player.forceAddEffect(new MobEffectInstance(EfmModRegistry.CURSE_EFM.get(), 200), event.player);
+                event.player.forceAddEffect(new MobEffectInstance(EfmModRegistry.UNDEADER.get(), 200), event.player);
+            }
         }
+    }
+
+    private static boolean isSunTick(LivingEntity entity) {
+        if (entity.level().isDay() && !entity.level().isClientSide) {
+            float f = entity.getLightLevelDependentMagicValue();
+            BlockPos blockpos = BlockPos.containing(entity.getX(), entity.getEyeY(), entity.getZ());
+            boolean flag = entity.isInWaterRainOrBubble() || entity.isInPowderSnow || entity.wasInPowderSnow;
+            if (f > 0.5F && /*EfmHelper.random.nextFloat() * 30.0F < (f - 0.4F) * 2.0F &&*/ !flag && entity.level().canSeeSky(blockpos)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @SubscribeEvent
@@ -322,7 +344,9 @@ public class CoreEventsHandler {
             ItemEntity entity = event.entity;
 
             if (entity.getOwner() instanceof Player player && EfmHelper.efmRandomNoRepeat(1000, 1).contains(EfmHelper.randomEfm.nextInt(1000))) {
-                player.sendSystemMessage(Component.literal("hello"));
+                ItemEntity heart = new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), EfmModRegistry.UNDEAD_HEART.get().getDefaultInstance());
+                heart.spawnAtLocation(EfmModRegistry.UNDEAD_HEART.get().getDefaultInstance());
+
                 entity.discard();
             }
         }

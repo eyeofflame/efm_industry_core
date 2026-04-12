@@ -4,6 +4,7 @@ import efm.dev.efmcore.Efmcore;
 import efm.dev.efmcore.common.registry.item.UndeadHeart;
 import efm.dev.efmcore.common.registry.mob_effect.CursedEfm;
 import efm.dev.efmcore.common.registry.mob_effect.DoubleJumpMobEffect;
+import efm.dev.efmcore.common.registry.mob_effect.UndeaderEffect;
 import efm.dev.efmcore.common.registry.potion.DoubleJumpPotion;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.Item;
@@ -24,6 +25,7 @@ public class EfmModRegistry {
 
     public static final RegistryObject<MobEffect> DOUBLEJUMP_EFFECT = EFFECTS.register("double_jump", DoubleJumpMobEffect::new);
     public static final RegistryObject<MobEffect> CURSE_EFM = EFFECTS.register("curse_efm", CursedEfm::new);
+    public static final RegistryObject<MobEffect> UNDEADER =  EFFECTS.register("undeader", UndeaderEffect::new);
     public static final RegistryObject<Item> UNDEAD_HEART = ITEMS.register("undead_heart", UndeadHeart::new);
 
     public static Map<Integer, RegistryObject<Potion>> map_level1 = new HashMap<>();

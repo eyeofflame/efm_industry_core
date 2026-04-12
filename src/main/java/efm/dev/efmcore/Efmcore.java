@@ -118,26 +118,6 @@ public class Efmcore {
                         stack
                 );
 
-                /*for (int i = 0; i < 2; i++) {
-                    ItemStack item0 = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level1.get(i).get());
-                    ItemStack item1 = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level1.get(i + 1).get());
-
-                    BrewingRecipeRegistry.addRecipe(
-                            StrictNBTIngredient.of(item0),
-                            Ingredient.of(configEfm.getUpgrade0()),
-                            item1
-                    );
-
-                    ItemStack itemStack = PotionUtils.setPotion(potion.copy(), EfmModRegistry.map_level2.get(i).get());
-
-                    BrewingRecipeRegistry.addRecipe(
-                            StrictNBTIngredient.of(item0),
-                            Ingredient.of(configEfm.getUpgrade1()),
-                            itemStack
-                    );
-
-                }*/
-
             }
         });
     }
